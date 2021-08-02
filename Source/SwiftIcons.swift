@@ -23,6 +23,13 @@
 import Foundation
 import UIKit
 
+public extension NSMutableAttributedString {
+    public func addFont(_ icon: FontType, color: UIColor, size: CGFloat) {
+        let attr = getAttributedString(prefixText: "", prefixTextColor: .clear, prefixTextFont: .systemFont(ofSize: 12), icons: [icon], iconsSize: size, iconsColor: color, postfixText: "", postfixTextColor: .clear, postfixTextFont: .systemFont(ofSize: 12))
+        self.append(attr)
+    }
+}
+
 public extension UIImage {
 
     /**
