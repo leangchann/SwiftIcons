@@ -175,6 +175,14 @@ public extension UILabel {
         self.setIcons(prefixText: prefixText ?? "", prefixTextColor: prefixTextColor ?? self.textColor, prefixTextFont: prefixTextFont ?? self.font, icons: icons, iconsSize: iconSize ?? self.font.pointSize, iconsColor: iconColor ?? self.textColor, bgColor: bgColor ?? UIColor.clear, postfixText: postfixText ?? "", postfixTextColor: postfixTextColor ?? self.textColor, postfixTextFont: postfixTextFont ?? self.font)
     }
 
+    func setIcon(data: [AttributeData]) {
+        self.setIcons(data: data)
+    }
+    fileprivate func setIcons(data: [AttributeData]) {
+       self.text = nil
+       attributedText = getAttributedString(data: data)
+   }
+
     /**
      This function sets the icon to UILabel with text around it with different colors
      
@@ -1022,6 +1030,34 @@ private func getAttributedString(prefixText: String, prefixTextColor: UIColor, p
     }
 
     return resultAttrString
+}
+
+public struct AttributeData {
+    let text: String
+    let textColor: UIColor
+    let textFont: UIFont?
+    let icon: FontType
+    let iconSize: CGFloat
+    let iconsColor: UIColor
+}
+
+private func getAttributedString(data: [AttributeData]) -> NSAttributedString {
+    
+    let resultAttrStrings = NSMutableAttributedString()
+    for i in data {
+        let resultAttrString = NSMutableAttributedString(string: "\(i.icon.familyName())\(i.text)")
+        
+        resultAttrString.addAttributes([
+            NSAttributedString.Key.font: i.icon.familyName(),
+            NSAttributedString.Key.foregroundColor: i.iconsColor
+        ], range: NSRange(location: 0, length: 1))
+        if i.text.count > 0 {
+            resultAttrString.addAttribute(NSAttributedString.Key.foregroundColor, value: i.textColor, range: NSRange(location: 1, length: i.text.count))
+        }
+        resultAttrStrings.append(resultAttrString)
+    }
+    
+    return resultAttrStrings
 }
 
 /**
